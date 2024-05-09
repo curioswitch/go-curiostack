@@ -1,0 +1,2 @@
+server:
+  address: :never # Actually not used in any test since this folder has both local and nonlocal.
