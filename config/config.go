@@ -6,6 +6,7 @@ import (
 	"io/fs"
 	"log"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/go-viper/mapstructure/v2"
@@ -25,23 +26,36 @@ type Server struct {
 	Address string `koanf:"address"`
 }
 
+// Google holds the configuration for using common GCP functionality.
+type Google struct {
+	// Project is the GCP project ID.
+	Project string `koanf:"project"`
+
+	// Region is the default region development resources are deployed to.
+	Region string `koanf:"region"`
+}
+
 // Common holds curiostack standard configuration objects. Server
 // configuration objects should embed this and define their own
 // fields on top of it.
 type Common struct {
 	// Server holds the configuration for the server.
 	Server Server `koanf:"server"`
+
+	// Google holds the configruation for using common GCP functionality.
+	Google Google `koanf:"google"`
 }
 
 // Load resolves the configuration into the provided conf object. Config is merged
 // in order from the following sources:
 //
 //  1. config.yaml embedded in this package. These are the curiostack defaults where applicable.
-//  2. config.yaml in the provided fs.FS if present.
-//  3. config-local.yaml in the provided fs.FS if present and CONFIG_ENV is unset (local development).
-//  4. config-nonlocal.yaml in the provided fs.FS if present and CONFIG_ENV is set.
-//  5. config-${CONFIG_ENV}.yaml in the provided fs.FS if present and CONFIG_ENV is set.
-//  6. Environment variables, where the config key is capitalized with '.' replaced with '_'.
+//  2. config.yaml at the base of the repository, identified by being next to go.work, if present.
+//  3. config.yaml in the provided fs.FS if present.
+//  4. config-local.yaml in the provided fs.FS if present and CONFIG_ENV is unset (local development).
+//  5. config-nonlocal.yaml in the provided fs.FS if present and CONFIG_ENV is set.
+//  6. config-${CONFIG_ENV}.yaml in the provided fs.FS if present and CONFIG_ENV is set.
+//  7. Environment variables, where the config key is capitalized with '.' replaced with '_'.
 func Load[T any](conf *T, confFiles fs.FS) error {
 	k := koanf.NewWithConf(koanf.Conf{
 		Delim:       ".",
@@ -53,21 +67,29 @@ func Load[T any](conf *T, confFiles fs.FS) error {
 		log.Fatalf("failed to load defaults: %v", err)
 	}
 
-	if err := loadIfPresent(k, confFiles, "config.yaml"); err != nil {
-		return err
+	if goWorkDir := findGoWorkDir(); goWorkDir != "" {
+		if err := loadIfPresent(k, os.DirFS(goWorkDir), "config.yaml"); err != nil {
+			return err
+		}
 	}
 
-	confEnv := os.Getenv("CONFIG_ENV")
-	if confEnv == "" {
-		if err := loadIfPresent(k, confFiles, "config-local.yaml"); err != nil {
+	if confFiles != nil {
+		if err := loadIfPresent(k, confFiles, "config.yaml"); err != nil {
 			return err
 		}
-	} else {
-		if err := loadIfPresent(k, confFiles, "config-nonlocal.yaml"); err != nil {
-			return err
-		}
-		if err := loadIfPresent(k, confFiles, fmt.Sprintf("config-%s.yaml", confEnv)); err != nil {
-			return err
+
+		confEnv := os.Getenv("CONFIG_ENV")
+		if confEnv == "" {
+			if err := loadIfPresent(k, confFiles, "config-local.yaml"); err != nil {
+				return err
+			}
+		} else {
+			if err := loadIfPresent(k, confFiles, "config-nonlocal.yaml"); err != nil {
+				return err
+			}
+			if err := loadIfPresent(k, confFiles, fmt.Sprintf("config-%s.yaml", confEnv)); err != nil {
+				return err
+			}
 		}
 	}
 
@@ -108,4 +130,23 @@ func loadIfPresent(k *koanf.Koanf, confFiles fs.FS, name string) error {
 	}
 
 	return nil
+}
+
+func findGoWorkDir() string {
+	dir, err := filepath.Abs(".")
+	if err != nil {
+		return ""
+	}
+	for {
+		if _, err := os.Stat(filepath.Join(dir, "go.work")); err == nil {
+			return dir
+		}
+
+		parent := filepath.Dir(dir)
+		if parent == dir || parent == "" {
+			return ""
+		}
+
+		dir = parent
+	}
 }

@@ -28,6 +28,11 @@ func TestLoadDefaults(t *testing.T) {
 			address: ":8080",
 		},
 		{
+			name:    "no config files",
+			fs:      nil,
+			address: ":8080",
+		},
+		{
 			name:    "all files, no env",
 			fs:      allfiles.FS,
 			address: ":local",
@@ -68,6 +73,9 @@ func TestLoadDefaults(t *testing.T) {
 
 			require.NoError(t, Load(&conf, tc.fs))
 			require.Equal(t, tc.address, conf.Server.Address)
+
+			// From repo root
+			require.Equal(t, "curioswitch-dev", conf.Google.Project)
 		})
 	}
 }
