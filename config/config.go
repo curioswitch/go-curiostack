@@ -68,7 +68,7 @@ func Load[T any](conf *T, confFiles fs.FS) error {
 	}
 
 	if goWorkDir := findGoWorkDir(); goWorkDir != "" {
-		if err := loadIfPresent(k, os.DirFS(goWorkDir), "config.yaml"); err != nil {
+		if err := loadIfPresent(k, os.DirFS(goWorkDir), ".curiostack.yaml"); err != nil {
 			return err
 		}
 	}
