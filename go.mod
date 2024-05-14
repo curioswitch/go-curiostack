@@ -4,6 +4,7 @@ go 1.22
 
 require (
 	firebase.google.com/go/v4 v4.14.0
+	github.com/curioswitch/go-build v0.0.0-20240513090355-a301ee03128d
 	github.com/go-chi/chi/v5 v5.0.12
 	github.com/go-viper/mapstructure/v2 v2.0.0-alpha.1
 	github.com/goyek/goyek/v2 v2.1.0

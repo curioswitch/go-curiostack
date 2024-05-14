@@ -17,7 +17,7 @@ type curiostackConfig struct {
 	config.Common
 }
 
-// DefineServer defines tasks for server projects.
+// DefineServer defines tasks such as docker builds for server projects.
 func DefineServer(opts ...ServerOption) {
 	dockerTags := flag.String("docker-tags", "dev", "Tags to add to add to built docker image.")
 	dockerLabels := flag.String("docker-labels", "", "Labels to add to add to built docker image.")

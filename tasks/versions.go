@@ -1,5 +1,6 @@
 package tasks
 
 const (
-	verKo = "v0.15.2"
+	verBuf = "v1.31.0"
+	verKo  = "v0.15.2"
 )
