@@ -8,7 +8,7 @@ require (
 	firebase.google.com/go/v4 v4.14.0
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/propagator v0.47.0
 	github.com/curioswitch/go-build v0.0.0-20240513090355-a301ee03128d
-	github.com/curioswitch/go-usegcp v0.0.0-20240524063518-50be8b8edfd9
+	github.com/curioswitch/go-usegcp v0.0.0-20240524082550-9d642ba35329
 	github.com/go-chi/chi/v5 v5.0.12
 	github.com/go-viper/mapstructure/v2 v2.0.0-alpha.1
 	github.com/goyek/goyek/v2 v2.1.0
@@ -27,6 +27,7 @@ require (
 	go.opentelemetry.io/otel/exporters/stdout/stdouttrace v1.27.0
 	go.opentelemetry.io/otel/sdk v1.27.0
 	go.opentelemetry.io/otel/sdk/metric v1.27.0
+	go.opentelemetry.io/otel/trace v1.27.0
 	golang.org/x/net v0.25.0
 	google.golang.org/api v0.180.0
 )
@@ -64,7 +65,6 @@ require (
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.49.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.27.0 // indirect
 	go.opentelemetry.io/otel/metric v1.27.0 // indirect
-	go.opentelemetry.io/otel/trace v1.27.0 // indirect
 	go.opentelemetry.io/proto/otlp v1.2.0 // indirect
 	golang.org/x/crypto v0.23.0 // indirect
 	golang.org/x/oauth2 v0.20.0 // indirect
