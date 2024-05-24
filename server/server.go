@@ -2,6 +2,7 @@ package server
 
 import (
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/curioswitch/go-usegcp/middleware/requestlog"
@@ -21,7 +22,9 @@ func NewMux() *chi.Mux {
 	r.Use(middleware.RealIP)
 	r.Use(middleware.Recoverer)
 	r.Use(otel.HTTPMiddleware())
-	r.Use(requestlog.NewMiddleware())
+	r.Use(middleware.Maybe(requestlog.NewMiddleware(), func(r *http.Request) bool {
+		return !strings.HasPrefix(r.URL.Path, "/internal/")
+	}))
 
 	r.Get("/internal/health", func(w http.ResponseWriter, _ *http.Request) {
 		w.WriteHeader(http.StatusOK)
