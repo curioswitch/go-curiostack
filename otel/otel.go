@@ -80,7 +80,7 @@ func newSpanExporter(ctx context.Context) (sdktrace.SpanExporter, error) {
 	case "console":
 		return stdouttrace.New()
 	case "otlp":
-		return otlptracehttp.New(ctx)
+		return otlptracehttp.New(ctx, otlptracehttp.WithInsecure())
 	case "none":
 		fallthrough
 	default:
@@ -109,7 +109,7 @@ func newMetricExporter(ctx context.Context) (sdkmetric.Exporter, error) {
 	case "console":
 		return stdoutmetric.New()
 	case "otlp":
-		return otlpmetrichttp.New(ctx)
+		return otlpmetrichttp.New(ctx, otlpmetrichttp.WithInsecure())
 	case "none":
 		fallthrough
 	default:
