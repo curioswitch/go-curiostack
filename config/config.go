@@ -35,6 +35,15 @@ type Google struct {
 	Region string `koanf:"region"`
 }
 
+// Logging holds the configuration for logging.
+type Logging struct {
+	// Level is the [slog.Level] to use. Defaults to "info".
+	Level string `koanf:"level"`
+
+	// JSON indicates if logs should be output in JSON format.
+	JSON bool `koanf:"json"`
+}
+
 // Common holds curiostack standard configuration objects. Server
 // configuration objects should embed this and define their own
 // fields on top of it.
@@ -44,6 +53,9 @@ type Common struct {
 
 	// Google holds the configruation for using common GCP functionality.
 	Google Google `koanf:"google"`
+
+	// Logging holds the configuration for logging.
+	Logging Logging `koanf:"logging"`
 }
 
 // Load resolves the configuration into the provided conf object. Config is merged
