@@ -6,8 +6,6 @@ import (
 )
 
 func main() {
-	build.DefineTasks(
-		build.LocalPackagePrefix("github.com/curioswitch/go-curiostack"),
-	)
+	build.DefineTasks()
 	boot.Main()
 }
