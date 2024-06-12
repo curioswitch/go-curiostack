@@ -7,7 +7,7 @@ require (
 	connectrpc.com/otelconnect v0.7.0
 	firebase.google.com/go/v4 v4.14.0
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/propagator v0.47.0
-	github.com/curioswitch/go-build v0.0.0-20240513090355-a301ee03128d
+	github.com/curioswitch/go-build v0.0.0-20240612031439-642962f6d0f9
 	github.com/curioswitch/go-usegcp v0.0.0-20240524082550-9d642ba35329
 	github.com/go-chi/chi/v5 v5.0.12
 	github.com/go-viper/mapstructure/v2 v2.0.0-alpha.1
@@ -45,6 +45,7 @@ require (
 	github.com/MicahParks/keyfunc v1.9.0 // indirect
 	github.com/cenkalti/backoff/v4 v4.3.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/fatih/color v1.16.0 // indirect
 	github.com/felixge/httpsnoop v1.0.4 // indirect
 	github.com/go-logr/logr v1.4.1 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
@@ -57,6 +58,8 @@ require (
 	github.com/googleapis/gax-go/v2 v2.12.4 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.20.0 // indirect
 	github.com/knadh/koanf/maps v0.1.1 // indirect
+	github.com/mattn/go-colorable v0.1.13 // indirect
+	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mattn/go-shellwords v1.0.12 // indirect
 	github.com/mitchellh/copystructure v1.2.0 // indirect
 	github.com/mitchellh/reflectwalk v1.0.2 // indirect

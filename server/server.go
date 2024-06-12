@@ -34,7 +34,7 @@ func NewMux() *chi.Mux {
 }
 
 // NewServer returns a new http.Server with standard settings to serve the given router.
-func NewServer(router http.Handler, conf config.Common) *http.Server {
+func NewServer(router http.Handler, conf *config.Common) *http.Server {
 	return &http.Server{
 		Addr:              conf.Server.Address,
 		Handler:           h2c.NewHandler(router, &http2.Server{}),

@@ -39,7 +39,7 @@ func TestFirebaseIDToken(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			ctx := context.Background()
 
-			token, err := FirebaseIDToken(ctx, tc.userID, tc.tenantID, conf.Google)
+			token, err := FirebaseIDToken(ctx, tc.userID, tc.tenantID, &conf.Google)
 			require.NoError(t, err)
 			require.NotEmpty(t, token)
 		})
