@@ -17,7 +17,7 @@ import (
 //
 // This method will use the service account integration-test@<gcp project>.iam.gserviceaccount.com for
 // issuing tokens and also set the quota project to the repo's configured GCP project.
-func FirebaseIDToken(ctx context.Context, userID string, tenantID string, google config.Google) (string, error) {
+func FirebaseIDToken(ctx context.Context, userID string, tenantID string, google *config.Google) (string, error) {
 	fbApp, err := firebase.NewApp(ctx, &firebase.Config{
 		ProjectID:        google.Project,
 		ServiceAccountID: fmt.Sprintf("integration-test@%s.iam.gserviceaccount.com", google.Project),

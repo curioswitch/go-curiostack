@@ -13,9 +13,9 @@ import (
 // Initialize initalizes logging for the given configuration, setting the
 // default slog handler. JSON should always be set to true in cloud
 // deployments.
-func Initialize(config config.Common) {
+func Initialize(conf *config.Logging) {
 	var level slog.Level
-	switch strings.ToLower(config.Logging.Level) {
+	switch strings.ToLower(conf.Level) {
 	case "debug":
 		level = slog.LevelDebug
 	case "warn":
@@ -29,7 +29,7 @@ func Initialize(config config.Common) {
 	}
 
 	var h slog.Handler
-	if config.Logging.JSON {
+	if conf.JSON {
 		h = gcpslog.NewHandler(os.Stderr, gcpslog.Level(level))
 	} else {
 		h = slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: level})
