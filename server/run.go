@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"io/fs"
 	"log/slog"
 	"net/http"
 
@@ -13,32 +14,47 @@ import (
 	"github.com/curioswitch/go-curiostack/logging"
 )
 
-// Run starts a server with the given configuration and options.
-// It returns an integer error code based on success or failure.
-// Run should generally be the last line in your main function and
-// passed to [os.Exit].
+// Builder allows configuring the server that will be launched by Main.
+type Builder struct {
+	mux *chi.Mux
+}
+
+func (b *Builder) Mux() *chi.Mux {
+	return b.mux
+}
+
+// Main is the entrypoint for starting a server using CurioStack.
+// It should be called from your main function and passed a pointer to your
+// configuration object which embeds [config.Common]. The setup callback
+// should set up handlers and such using methods on Builder to define the
+// resulting server.
 //
-//	func main() {
-//	  os.Exit(server.Run(ctx, conf.Common, opts...))
-//	}
-func Run(ctx context.Context, conf *config.Common, opts ...Option) int {
-	c := &runConfig{}
-	for _, o := range opts {
-		o.apply(c)
+// If you need to define default values before loading user config, they should
+// be set on the config before passing, or otherwise it is fine to just pass a
+// pointer to an empty struct. confFiles is a [fs.FS] to resolve config files as
+// used by [config.Load].
+//
+// An exit code is returned, so the general pattern for this function will
+// be to call [os.Exit] with the result of this function.
+func Main[T config.CurioStack](conf T, confFiles fs.FS, setup func(ctx context.Context, conf T, b *Builder) error) int {
+	ctx := context.Background()
+
+	if err := config.Load(conf, confFiles); err != nil {
+		slog.Error(fmt.Sprintf("Failed to load config: %v", err))
+		return 1
 	}
 
-	logging.Initialize(&conf.Logging)
+	logging.Initialize(&conf.GetCommon().Logging)
 
-	mux := NewMux()
-
-	for _, setup := range c.setupMux {
-		if err := setup(mux); err != nil {
-			slog.ErrorContext(ctx, fmt.Sprintf("Failed to setup mux: %v", err))
-			return 1
-		}
+	b := &Builder{
+		mux: NewMux(),
+	}
+	if err := setup(ctx, conf, b); err != nil {
+		slog.Error(fmt.Sprintf("Failed to build server: %v", err))
+		return 1
 	}
 
-	srv := NewServer(mux, conf)
+	srv := NewServer(b.mux, conf.GetCommon())
 
 	slog.InfoContext(ctx, fmt.Sprintf("Starting server on address %v", srv.Addr))
 	if err := srv.ListenAndServe(); !errors.Is(err, http.ErrServerClosed) {
@@ -47,24 +63,4 @@ func Run(ctx context.Context, conf *config.Common, opts ...Option) int {
 	}
 
 	return 0
-}
-
-type runConfig struct {
-	setupMux []func(mux *chi.Mux) error
-}
-
-// Option is a configuration option for Run.
-type Option interface {
-	apply(conf *runConfig)
-}
-
-// SetupMux adds a function to setup the [chi.Mux] served by the server.
-func SetupMux(setup func(mux *chi.Mux) error) Option {
-	return setupMuxOption(setup)
-}
-
-type setupMuxOption func(mux *chi.Mux) error
-
-func (o setupMuxOption) apply(conf *runConfig) {
-	conf.setupMux = append(conf.setupMux, o)
 }
