@@ -8,7 +8,6 @@ linters:
     - gci
     - gocritic
     - gofumpt
-    - goimports
     - goprintffuncname
     - inamedparam
     - intrange
