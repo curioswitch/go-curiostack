@@ -14,8 +14,7 @@ import (
 
 // HandleConnectUnary mounts a connect unary handler for the given procedure with the
 // given handler. Sample requests will be displayed in the docs interface and is recommended
-// to be provided whenever possible. The type of the sample requests must match the type of
-// the request parameter of the handler.
+// to be provided whenever possible.
 func HandleConnectUnary[Req any, Resp any](
 	s *Server,
 	procedure string,
