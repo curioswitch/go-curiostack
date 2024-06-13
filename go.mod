@@ -8,6 +8,8 @@ require (
 	firebase.google.com/go/v4 v4.14.0
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/propagator v0.47.0
 	github.com/curioswitch/go-build v0.0.0-20240612031439-642962f6d0f9
+	github.com/curioswitch/go-docs-handler v0.1.5
+	github.com/curioswitch/go-docs-handler/plugins/proto v0.1.5
 	github.com/curioswitch/go-usegcp v0.0.0-20240524082550-9d642ba35329
 	github.com/go-chi/chi/v5 v5.0.12
 	github.com/go-viper/mapstructure/v2 v2.0.0-alpha.1
@@ -30,6 +32,7 @@ require (
 	go.opentelemetry.io/otel/trace v1.27.0
 	golang.org/x/net v0.25.0
 	google.golang.org/api v0.180.0
+	google.golang.org/protobuf v1.34.1
 )
 
 require (
@@ -58,6 +61,7 @@ require (
 	github.com/googleapis/gax-go/v2 v2.12.4 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.20.0 // indirect
 	github.com/knadh/koanf/maps v0.1.1 // indirect
+	github.com/magefile/mage v1.15.0 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mattn/go-shellwords v1.0.12 // indirect
@@ -80,6 +84,5 @@ require (
 	google.golang.org/genproto/googleapis/api v0.0.0-20240520151616-dc85e6b867a5 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240520151616-dc85e6b867a5 // indirect
 	google.golang.org/grpc v1.64.0 // indirect
-	google.golang.org/protobuf v1.34.1 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
