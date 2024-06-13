@@ -3,10 +3,13 @@ package otel
 import (
 	"context"
 	"log"
+	"net/http"
 	"os"
+	"sync"
 
 	gcppropagator "github.com/GoogleCloudPlatform/opentelemetry-operations-go/propagator"
 	"go.opentelemetry.io/contrib/detectors/gcp"
+	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetrichttp"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp"
@@ -21,9 +24,21 @@ import (
 var (
 	meterProvider  *sdkmetric.MeterProvider
 	tracerProvider *sdktrace.TracerProvider
+
+	initOnce sync.Once
 )
 
 func init() {
+	Initialize()
+}
+
+// Initialize initializes the OpenTelemetry SDK with the default configuration
+// and instruments globals where applicable.
+func Initialize() {
+	initOnce.Do(doInitialize)
+}
+
+func doInitialize() {
 	ctx := context.Background()
 
 	// Avoid autoexport package because we prefer to default to none, which is not easy,
@@ -40,6 +55,8 @@ func init() {
 			propagation.TraceContext{},
 			propagation.Baggage{},
 		))
+
+	http.DefaultClient = otelhttp.DefaultClient
 }
 
 func newResource(ctx context.Context) *resource.Resource {

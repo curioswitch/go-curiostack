@@ -58,8 +58,31 @@ type Common struct {
 	Logging Logging `koanf:"logging"`
 }
 
-// Load resolves the configuration into the provided conf object. Config is merged
-// in order from the following sources:
+func (c *Common) GetCommon() *Common {
+	return c
+}
+
+type unimplementable struct{}
+
+func (c *Common) unimplementable() unimplementable {
+	return unimplementable{}
+}
+
+// CurioStack is a configuration object for a project using CurioStack. To create a
+// CurioStack configuration object, embed Common into a config struct for your project,
+// adding any other configuration fields you need. This interface cannot be implemented
+// outside of this package.
+type CurioStack interface {
+	// GetCommon returns the Common embedded in this configuration. It is equivalent to
+	// calling e.g. `&conf.Common`.
+	GetCommon() *Common
+	unimplementable() unimplementable
+}
+
+// Load resolves the configuration into the provided conf object. The conf object must
+// embed Common.
+//
+// Config is merged in order from the following sources:
 //
 //  1. config.yaml embedded in this package. These are the curiostack defaults where applicable.
 //  2. config.yaml at the base of the repository, identified by being next to go.work, if present.
@@ -68,7 +91,7 @@ type Common struct {
 //  5. config-nonlocal.yaml in the provided fs.FS if present and CONFIG_ENV is set.
 //  6. config-${CONFIG_ENV}.yaml in the provided fs.FS if present and CONFIG_ENV is set.
 //  7. Environment variables, where the config key is capitalized with '.' replaced with '_'.
-func Load[T any](conf *T, confFiles fs.FS) error {
+func Load(conf CurioStack, confFiles fs.FS) error {
 	k := koanf.NewWithConf(koanf.Conf{
 		Delim:       ".",
 		StrictMerge: true,
