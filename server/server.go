@@ -26,10 +26,6 @@ func NewMux() *chi.Mux {
 		return !strings.HasPrefix(r.URL.Path, "/internal/")
 	}))
 
-	r.Get("/internal/health", func(w http.ResponseWriter, _ *http.Request) {
-		w.WriteHeader(http.StatusOK)
-	})
-
 	return r
 }
 

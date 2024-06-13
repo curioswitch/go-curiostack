@@ -35,6 +35,8 @@ func (b *Server) Mux() *chi.Mux {
 func (b *Server) Start(ctx context.Context) error {
 	b.startCalled = true
 
+	maybeDefineHealthEndpoint(b.mux)
+
 	srv := NewServer(b.mux, b.conf)
 	defer srv.Close()
 
@@ -88,4 +90,22 @@ func Main[T config.CurioStack](conf T, confFiles fs.FS, run func(ctx context.Con
 	}
 
 	return 0
+}
+
+func maybeDefineHealthEndpoint(mux *chi.Mux) {
+	healthDefined := false
+	// Define /internal/health if not already defined.
+	_ = chi.Walk(mux, func(_, route string, _ http.Handler, _ ...func(http.Handler) http.Handler) error {
+		if route == "/internal/health" {
+			healthDefined = true
+			return nil
+		}
+		return nil
+	})
+
+	if !healthDefined {
+		mux.Get("/internal/health", func(w http.ResponseWriter, _ *http.Request) {
+			w.WriteHeader(http.StatusOK)
+		})
+	}
 }
