@@ -12,6 +12,7 @@ import (
 
 	"github.com/curioswitch/go-curiostack/config"
 	"github.com/curioswitch/go-curiostack/logging"
+	"github.com/curioswitch/go-curiostack/otel"
 )
 
 // Builder allows configuring the server that will be launched by Main.
@@ -19,6 +20,8 @@ type Builder struct {
 	mux *chi.Mux
 }
 
+// Mux returns the [chi.Mux] that will be served and can be used to add
+// route handlers.
 func (b *Builder) Mux() *chi.Mux {
 	return b.mux
 }
@@ -39,6 +42,8 @@ func (b *Builder) Mux() *chi.Mux {
 func Main[T config.CurioStack](conf T, confFiles fs.FS, setup func(ctx context.Context, conf T, b *Builder) error) int {
 	ctx := context.Background()
 
+	otel.Initialize() // initialize as early as possible to instrument globals
+
 	if err := config.Load(conf, confFiles); err != nil {
 		slog.Error(fmt.Sprintf("Failed to load config: %v", err))
 		return 1
@@ -49,6 +54,7 @@ func Main[T config.CurioStack](conf T, confFiles fs.FS, setup func(ctx context.C
 	b := &Builder{
 		mux: NewMux(),
 	}
+
 	if err := setup(ctx, conf, b); err != nil {
 		slog.Error(fmt.Sprintf("Failed to build server: %v", err))
 		return 1
