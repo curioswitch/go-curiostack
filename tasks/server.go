@@ -131,7 +131,7 @@ func fullDockerRepo(conf *serverConfig) string {
 func koCmd(dockerTags string, dockerLabels string) string {
 	labelsStr := ""
 	if dockerLabels != "" {
-		labelsStr = "--image-label " + dockerLabels
+		labelsStr = fmt.Sprintf("--image-label '%s'", dockerLabels)
 	}
 	return fmt.Sprintf("go run github.com/google/ko@%s build --bare --platform=linux/amd64,linux/arm64 --tags %s %s .", verKo, dockerTags, labelsStr)
 }
