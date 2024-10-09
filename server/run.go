@@ -34,8 +34,8 @@ type Server struct {
 
 	conf *config.Common
 
-	protoDocsRequests []protoDocsRequests
-	docsFirebaseAuth  bool
+	protoDocsRequests  []protoDocsRequests
+	docsFirebaseDomain string
 
 	startCalled bool
 }
@@ -49,12 +49,14 @@ func Mux(s *Server) *chi.Mux {
 	return s.mux
 }
 
-// EnableDocsFirebaseAuth enables Firebase auth for the docs handler. Firebase
-// credentials of the browser, generally set by running the actual web app
+// EnableDocsFirebaseAuth enables Firebase auth for the docs handler. The domain
+// must be the auth domain of the Firebase project.
+//
+// Firebase credentials of the browser, generally set by running the actual web app
 // locally, will be read and added as authorization headers in requests to the
 // server.
-func EnableDocsFirebaseAuth(s *Server) {
-	s.docsFirebaseAuth = true
+func EnableDocsFirebaseAuth(s *Server, domain string) {
+	s.docsFirebaseDomain = domain
 }
 
 // Start starts the server, listening on the configured server address for requests
@@ -155,9 +157,10 @@ func (b *Server) mountDefaultEndpoints() error {
 				protodocopts = append(protodocopts, protodocs.WithAdditionalService(svc))
 			}
 
-			if b.docsFirebaseAuth {
+			if b.docsFirebaseDomain != "" {
+				script := docsFirebaseAuthScript(b.docsFirebaseDomain)
 				docopts = append(docopts, docshandler.WithInjectedScriptSupplier(func() string {
-					return docsFirebaseAuthScript
+					return script
 				}))
 			}
 
@@ -178,32 +181,34 @@ func (b *Server) mountDefaultEndpoints() error {
 	return nil
 }
 
-const docsFirebaseAuthScript = `
-	function include(url) {
-		return new Promise((resolve, reject) => {
-			var script = document.createElement('script');
-			script.type = 'text/javascript';
-			script.src = url;
+func docsFirebaseAuthScript(domain string) string {
+	return fmt.Sprintf(`
+		function include(url) {
+			return new Promise((resolve, reject) => {
+				var script = document.createElement('script');
+				script.type = 'text/javascript';
+				script.src = url;
 
-			script.onload = function() {
-				resolve({ script });
-			};
+				script.onload = function() {
+					resolve({ script });
+				};
 
-			document.getElementsByTagName('head')[0].appendChild(script);
-		});
-	}
+				document.getElementsByTagName('head')[0].appendChild(script);
+			});
+		}
 
-	async function loadScripts() {
-		await include("https://alpha.tasuke.dev/__/firebase/8.10.1/firebase-app.js");
-		await include("https://alpha.tasuke.dev/__/firebase/8.10.1/firebase-auth.js");
-		await include("https://alpha.tasuke.dev/__/firebase/init.js");
-		firebase.auth();
-	}
-	loadScripts();
+		async function loadScripts() {
+			await include("https://%s/__/firebase/8.10.1/firebase-app.js");
+			await include("https://%s/__/firebase/8.10.1/firebase-auth.js");
+			await include("https://%s/__/firebase/init.js");
+			firebase.auth();
+		}
+		loadScripts();
 
-	async function getAuthorization() {
-		const token = await firebase.auth().currentUser.getIdToken();
-		return {"Authorization": "Bearer " + token};
-	}
-	window.armeria.registerHeaderProvider(getAuthorization);
-	`
+		async function getAuthorization() {
+			const token = await firebase.auth().currentUser.getIdToken();
+			return {"Authorization": "Bearer " + token};
+		}
+		window.armeria.registerHeaderProvider(getAuthorization);
+	`, domain, domain, domain)
+}
