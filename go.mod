@@ -32,7 +32,7 @@ require (
 	go.opentelemetry.io/otel/trace v1.33.0
 	golang.org/x/net v0.33.0
 	google.golang.org/api v0.214.0
-	google.golang.org/protobuf v1.36.0
+	google.golang.org/protobuf v1.36.1
 )
 
 require (
