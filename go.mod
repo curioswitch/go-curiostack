@@ -2,6 +2,8 @@ module github.com/curioswitch/go-curiostack
 
 go 1.23.0
 
+toolchain go1.24.1
+
 require (
 	connectrpc.com/connect v1.18.1
 	connectrpc.com/otelconnect v0.7.2
@@ -14,7 +16,7 @@ require (
 	github.com/go-chi/chi/v5 v5.2.1
 	github.com/go-viper/mapstructure/v2 v2.2.1
 	github.com/goyek/goyek/v2 v2.3.0
-	github.com/goyek/x v0.2.0
+	github.com/goyek/x v0.3.0
 	github.com/knadh/koanf/parsers/yaml v0.1.0
 	github.com/knadh/koanf/providers/env v1.0.0
 	github.com/knadh/koanf/providers/rawbytes v0.1.0
@@ -31,7 +33,7 @@ require (
 	go.opentelemetry.io/otel/sdk/metric v1.35.0
 	go.opentelemetry.io/otel/trace v1.35.0
 	golang.org/x/net v0.37.0
-	google.golang.org/api v0.224.0
+	google.golang.org/api v0.226.0
 	google.golang.org/protobuf v1.36.5
 )
 
@@ -56,7 +58,7 @@ require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/envoyproxy/go-control-plane/envoy v1.32.4 // indirect
 	github.com/envoyproxy/protoc-gen-validate v1.2.1 // indirect
-	github.com/fatih/color v1.17.0 // indirect
+	github.com/fatih/color v1.18.0 // indirect
 	github.com/felixge/httpsnoop v1.0.4 // indirect
 	github.com/go-logr/logr v1.4.2 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
@@ -83,15 +85,15 @@ require (
 	go.opentelemetry.io/proto/otlp v1.5.0 // indirect
 	golang.org/x/crypto v0.36.0 // indirect
 	golang.org/x/mod v0.20.0 // indirect
-	golang.org/x/oauth2 v0.27.0 // indirect
+	golang.org/x/oauth2 v0.28.0 // indirect
 	golang.org/x/sync v0.12.0 // indirect
 	golang.org/x/sys v0.31.0 // indirect
 	golang.org/x/text v0.23.0 // indirect
-	golang.org/x/time v0.10.0 // indirect
+	golang.org/x/time v0.11.0 // indirect
 	google.golang.org/appengine/v2 v2.0.6 // indirect
 	google.golang.org/genproto v0.0.0-20241118233622-e639e219e697 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20250218202821-56aae31c358a // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20250227231956-55c901821b1e // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20250303144028-a0af3efb3deb // indirect
 	google.golang.org/grpc v1.71.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
