@@ -2,8 +2,6 @@ module github.com/curioswitch/go-curiostack
 
 go 1.23.0
 
-toolchain go1.24.1
-
 require (
 	connectrpc.com/connect v1.18.1
 	connectrpc.com/otelconnect v0.7.2
