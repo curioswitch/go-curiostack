@@ -1,0 +1,113 @@
+name: Server CI (Go)
+on:
+  workflow_call:
+    inputs:
+      project_dir:
+        description: Directory of the project to build
+        required: true
+        type: string
+      service:
+        description: Service to build
+        required: true
+        type: string
+      deploy_dev:
+        description: Whether to deploy to dev
+        type: boolean
+        default: true
+      environment:
+        description: GitHub environment to deploy to
+        type: string
+        default: ${{ github.event_name != 'pull_request' && (startsWith(github.ref_name, 'release/') && 'prod' || 'dev') || null }}
+      gcp_project_id:
+        description: GCP project ID to push to
+        type: string
+        default: ${{ startsWith(github.ref_name, 'release/') && vars.GCP_PROJECT_ID_PROD || vars.GCP_PROJECT_ID_DEV }}
+      gcp_project_number:
+        description: GCP project number to push to
+        type: string
+        default: ${{ startsWith(github.ref_name, 'release/') && vars.GCP_PROJECT_NUMBER_PROD || vars.GCP_PROJECT_NUMBER_DEV }}
+
+permissions:
+  actions: read
+  contents: read
+  id-token: write
+
+jobs:
+  check:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-24.04
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.work
+          cache-dependency-path: "/**/go.sum"
+
+      - name: run lints
+        # We don't have OS-specific code so would be completely repetitive to run
+        # lint on all of them.
+        if: ${{ startsWith(matrix.os, 'ubuntu-') }}
+        run: go run ./build lint
+        working-directory: ${{ inputs.project_dir }}
+
+      - name: run tests
+        run: go run ./build test
+        working-directory: ${{ inputs.project_dir }}
+
+  docker:
+    runs-on: ubuntu-24.04
+
+    environment: ${{ inputs.environment }}
+
+    env:
+      DOCKER_PUSH: ${{ github.event_name != 'pull_request' && 'yes' || 'no' }}
+      DOCKER_DEPLOY: ${{ github.event_name != 'pull_request' && !startsWith(github.ref_name, 'release/') && !inputs.deploy_dev && 'yes' || 'no' }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.work
+          cache-dependency-path: "/**/go.sum"
+
+      - id: google-auth
+        if: ${{ env.DOCKER_PUSH == 'yes' }}
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: projects/${{ inputs.gcp_project_number }}/locations/global/workloadIdentityPools/github/providers/github
+          project_id: ${{ inputs.gcp_project_id }}
+
+      - uses: google-github-actions/setup-gcloud@v2
+        if: ${{ env.DOCKER_PUSH == 'yes' }}
+
+      - name: Configure Docker
+        if: ${{ env.DOCKER_PUSH == 'yes' }}
+        run: gcloud auth configure-docker asia-northeast1-docker.pkg.dev
+
+      - id: docker-meta
+        uses: docker/metadata-action@v5
+        with:
+          tags: |
+            type=ref,event=branch
+            type=ref,event=tag
+            type=ref,event=pr
+            type=sha,format=long
+          sep-tags: ","
+          sep-labels: ","
+
+      - name: Build and push image
+        working-directory: ${{ inputs.project_dir }}
+        run: go run ./build -v --docker-tags ${{ steps.docker-meta.outputs.tags }} --docker-labels '${{ steps.docker-meta.outputs.labels }}' ${{ env.DOCKER_PUSH == 'yes' && 'push' || 'docker' }}
+        env:
+          GOOGLE_PROJECT: ${{ inputs.gcp_project_id }}
+
+      - name: Deploy service
+        if: ${{ env.DOCKER_DEPLOY == 'yes' }}
+        run: gcloud run deploy ${{ inputs.service }} --region asia-northeast1 --image asia-northeast1-docker.pkg.dev/${{ inputs.gcp_project_id }}/docker/${{ inputs.service }}:sha-${{ github.sha }}
