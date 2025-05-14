@@ -7,7 +7,7 @@ require (
 	connectrpc.com/otelconnect v0.7.2
 	firebase.google.com/go/v4 v4.15.2
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/propagator v0.51.0
-	github.com/curioswitch/go-build v0.1.0
+	github.com/curioswitch/go-build v0.2.0
 	github.com/curioswitch/go-docs-handler v0.1.5
 	github.com/curioswitch/go-docs-handler/plugins/proto v0.1.5
 	github.com/curioswitch/go-usegcp v0.0.0-20240524082550-9d642ba35329

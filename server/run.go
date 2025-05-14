@@ -69,7 +69,11 @@ func Start(ctx context.Context, s *Server) error {
 	}
 
 	srv := NewServer(s.mux, s.conf)
-	defer srv.Close()
+	defer func() {
+		if err := srv.Close(); err != nil {
+			slog.WarnContext(ctx, "Failed to close server", "error", err)
+		}
+	}()
 
 	slog.InfoContext(ctx, fmt.Sprintf("Starting server on address %v", srv.Addr))
 	if err := srv.ListenAndServe(); !errors.Is(err, http.ErrServerClosed) {

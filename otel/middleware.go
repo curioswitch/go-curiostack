@@ -24,11 +24,7 @@ func HTTPMiddleware() func(http.Handler) http.Handler {
 		otelhttp.WithMeterProvider(meterProvider),
 		otelhttp.WithTracerProvider(tracerProvider),
 		otelhttp.WithFilter(func(r *http.Request) bool {
-			if strings.HasPrefix(r.URL.Path, "/internal/") {
-				return false
-			}
-
-			return true
+			return !strings.HasPrefix(r.URL.Path, "/internal/")
 		}),
 	}
 

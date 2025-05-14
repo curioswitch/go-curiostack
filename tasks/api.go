@@ -25,7 +25,7 @@ func DefineAPI() {
 		Action: func(a *goyek.A) {
 			cmd.Exec(a, fmt.Sprintf("go run github.com/bufbuild/buf/cmd/buf@%s generate", verBuf))
 
-			if err := os.MkdirAll("pb", 0o755); err != nil {
+			if err := os.MkdirAll("pb", 0o755); err != nil { //nolint:gosec
 				a.Errorf("failed to create pb directory: %v", err)
 			}
 			cmd.Exec(a, fmt.Sprintf("go run github.com/bufbuild/buf/cmd/buf@%s build --as-file-descriptor-set -o ./descriptors/descriptorset.pb", verBuf))

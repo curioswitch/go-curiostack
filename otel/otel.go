@@ -2,6 +2,7 @@ package otel
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -95,13 +96,21 @@ func newTracerProvider(ctx context.Context, res *resource.Resource) *sdktrace.Tr
 func newSpanExporter(ctx context.Context) (sdktrace.SpanExporter, error) {
 	switch os.Getenv("OTEL_TRACES_EXPORTER") {
 	case "console":
-		return stdouttrace.New()
+		exp, err := stdouttrace.New()
+		if err != nil {
+			return nil, fmt.Errorf("otel: creating stdout span exporter: %w", err)
+		}
+		return exp, nil
 	case "otlp":
-		return otlptracehttp.New(ctx, otlptracehttp.WithInsecure())
+		exp, err := otlptracehttp.New(ctx, otlptracehttp.WithInsecure())
+		if err != nil {
+			return nil, fmt.Errorf("otel: creating otlp span exporter: %w", err)
+		}
+		return exp, nil
 	case "none":
 		fallthrough
 	default:
-		return nil, nil
+		return nil, nil //nolint:nilnil
 	}
 }
 
@@ -124,12 +133,20 @@ func newMeterProvider(ctx context.Context, res *resource.Resource) *sdkmetric.Me
 func newMetricExporter(ctx context.Context) (sdkmetric.Exporter, error) {
 	switch os.Getenv("OTEL_METRICS_EXPORTER") {
 	case "console":
-		return stdoutmetric.New()
+		exp, err := stdoutmetric.New()
+		if err != nil {
+			return nil, fmt.Errorf("otel: creating stdout metric exporter: %w", err)
+		}
+		return exp, nil
 	case "otlp":
-		return otlpmetrichttp.New(ctx, otlpmetrichttp.WithInsecure())
+		exp, err := otlpmetrichttp.New(ctx, otlpmetrichttp.WithInsecure())
+		if err != nil {
+			return nil, fmt.Errorf("otel: creating otlp metric exporter: %w", err)
+		}
+		return exp, nil
 	case "none":
 		fallthrough
 	default:
-		return nil, nil
+		return nil, nil //nolint:nilnil
 	}
 }
