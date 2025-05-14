@@ -38,7 +38,11 @@ func HandleConnectUnary[Req any, Resp any](
 		panic("procedure must be a constant from connect generated code, such as curioapi.CurioServiceMethodProcedure")
 	}
 
-	method := svc.(protoreflect.ServiceDescriptor).Methods().ByName(protoreflect.Name(methodName))
+	svcDesc, ok := svc.(protoreflect.ServiceDescriptor)
+	if !ok {
+		panic("svc must be a service descriptor")
+	}
+	method := svcDesc.Methods().ByName(protoreflect.Name(methodName))
 	if method == nil {
 		panic("procedure must be a constant from connect generated code, such as curioapi.CurioServiceMethodProcedure")
 	}
@@ -72,7 +76,7 @@ func HandleConnectUnary[Req any, Resp any](
 		for i, r := range sampleRequests {
 			// We already verified Req matches the handler type defined in proto so know this
 			// type cast works.
-			sampleReqs[i] = any(r).(proto.Message)
+			sampleReqs[i] = any(r).(proto.Message) //nolint:forcetypeassert
 		}
 		s.protoDocsRequests = append(s.protoDocsRequests, protoDocsRequests{
 			procedure: procedure,

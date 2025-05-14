@@ -8,7 +8,7 @@ A full example using the stack can be found in [tasuke](https://github.com/curio
 
 ### Build tasks
 
-CurioStack defines uild tasks intended to be used with [go-build](https://github.com/curioswitch/go-build),
+CurioStack defines build tasks intended to be used with [go-build](https://github.com/curioswitch/go-build),
 specific to server development.
 
 - Docker image build and push via [ko](https://ko.build)
