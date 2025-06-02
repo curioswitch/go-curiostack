@@ -1,12 +1,12 @@
 module github.com/curioswitch/go-curiostack
 
-go 1.23.0
+go 1.23.8
 
 require (
 	connectrpc.com/connect v1.18.1
 	connectrpc.com/otelconnect v0.7.2
 	firebase.google.com/go/v4 v4.15.2
-	github.com/GoogleCloudPlatform/opentelemetry-operations-go/propagator v0.51.0
+	github.com/GoogleCloudPlatform/opentelemetry-operations-go/propagator v0.52.0
 	github.com/curioswitch/go-build v0.2.0
 	github.com/curioswitch/go-docs-handler v0.1.5
 	github.com/curioswitch/go-docs-handler/plugins/proto v0.1.5
@@ -31,7 +31,7 @@ require (
 	go.opentelemetry.io/otel/sdk/metric v1.36.0
 	go.opentelemetry.io/otel/trace v1.36.0
 	golang.org/x/net v0.40.0
-	google.golang.org/api v0.234.0
+	google.golang.org/api v0.235.0
 	google.golang.org/protobuf v1.36.6
 )
 
@@ -53,13 +53,13 @@ require (
 	github.com/cenkalti/backoff/v5 v5.0.2 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/cncf/xds/go v0.0.0-20250121191232-2f005788dc42 // indirect
-	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/envoyproxy/go-control-plane/envoy v1.32.4 // indirect
 	github.com/envoyproxy/protoc-gen-validate v1.2.1 // indirect
 	github.com/fatih/color v1.18.0 // indirect
 	github.com/felixge/httpsnoop v1.0.4 // indirect
 	github.com/go-jose/go-jose/v4 v4.0.4 // indirect
-	github.com/go-logr/logr v1.4.2 // indirect
+	github.com/go-logr/logr v1.4.3 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/golang-jwt/jwt/v4 v4.5.1 // indirect
 	github.com/golang/protobuf v1.5.4 // indirect
@@ -76,7 +76,7 @@ require (
 	github.com/mitchellh/copystructure v1.2.0 // indirect
 	github.com/mitchellh/reflectwalk v1.0.2 // indirect
 	github.com/planetscale/vtprotobuf v0.6.1-0.20240319094008-0393e58bdf10 // indirect
-	github.com/pmezard/go-difflib v1.0.0 // indirect
+	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/spiffe/go-spiffe/v2 v2.5.0 // indirect
 	github.com/zeebo/errs v1.4.0 // indirect
 	go.opentelemetry.io/auto/sdk v1.1.0 // indirect
