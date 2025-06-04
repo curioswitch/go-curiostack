@@ -1,6 +1,6 @@
 module github.com/curioswitch/go-curiostack
 
-go 1.23.0
+go 1.23.6
 
 require (
 	connectrpc.com/connect v1.18.1
@@ -10,7 +10,7 @@ require (
 	github.com/curioswitch/go-build v0.2.0
 	github.com/curioswitch/go-docs-handler v0.1.5
 	github.com/curioswitch/go-docs-handler/plugins/proto v0.1.5
-	github.com/curioswitch/go-usegcp v0.0.0-20240524082550-9d642ba35329
+	github.com/curioswitch/go-usegcp v0.0.0-20250604051341-ca63e0ecb9d7
 	github.com/go-chi/chi/v5 v5.2.1
 	github.com/go-viper/mapstructure/v2 v2.2.1
 	github.com/goyek/goyek/v2 v2.3.0
