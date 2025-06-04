@@ -6,12 +6,12 @@ import (
 	"strings"
 
 	"connectrpc.com/connect"
+	"github.com/curioswitch/go-usegcp/middleware/requestlog"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 	"google.golang.org/protobuf/reflect/protoregistry"
 
 	"github.com/curioswitch/go-curiostack/otel"
-	"github.com/curioswitch/go-usegcp/middleware/requestlog"
 )
 
 // HandleConnectUnary mounts a connect unary handler for the given procedure with the
