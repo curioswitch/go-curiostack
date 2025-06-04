@@ -2,9 +2,11 @@ package server
 
 import (
 	"context"
+	"log/slog"
 	"strings"
 
 	"connectrpc.com/connect"
+	"github.com/curioswitch/go-usegcp/middleware/requestlog"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 	"google.golang.org/protobuf/reflect/protoregistry"
@@ -95,6 +97,40 @@ func checkMatchesType(p any, desc protoreflect.Descriptor) bool {
 // ConnectHandlerOptions returns the default options for connect handlers.
 func ConnectHandlerOptions() []connect.HandlerOption {
 	return []connect.HandlerOption{
-		connect.WithInterceptors(otel.ConnectInterceptor()),
+		connect.WithInterceptors(rpcLogger(), otel.ConnectInterceptor()),
 	}
+}
+
+func rpcLogger() connect.Interceptor {
+	return connect.UnaryInterceptorFunc(func(next connect.UnaryFunc) connect.UnaryFunc {
+		return func(ctx context.Context, req connect.AnyRequest) (res connect.AnyResponse, err error) {
+			svc, method := parseFullMethod(req.Spec().Procedure)
+			requestlog.AddExtraAttr(ctx, slog.String("rpc.service", svc))
+			requestlog.AddExtraAttr(ctx, slog.String("rpc.method", method))
+
+			defer func() {
+				grpcCode := 0
+				if p := recover(); p != nil {
+					defer panic(p)
+					grpcCode = int(connect.CodeUnknown)
+				} else if err != nil {
+					grpcCode = int(connect.CodeOf(err))
+					requestlog.AddExtraAttr(ctx, slog.String("error", err.Error()))
+				}
+
+				requestlog.AddExtraAttr(ctx, slog.Int("rpc.grpc.status_code", grpcCode))
+			}()
+
+			res, err = next(ctx, req)
+			return res, err
+		}
+	})
+}
+
+// We assume a well formed method since we only use this from an interceptor.
+// /grpc.service/method.
+func parseFullMethod(m string) (string, string) {
+	m = m[1:]
+	pos := strings.LastIndexByte(m, '/')
+	return m[:pos], m[pos+1:]
 }
