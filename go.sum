@@ -52,8 +52,8 @@ github.com/curioswitch/go-docs-handler v0.1.5 h1:MIdGAlcpiQLi1grnPwc/CVBuSOu374b
 github.com/curioswitch/go-docs-handler v0.1.5/go.mod h1:gSxE5Z46knEcLh6EtrwlmsApqcAp2bQUJl3csQiePWI=
 github.com/curioswitch/go-docs-handler/plugins/proto v0.1.5 h1:OjIICuxWhb+3+0GJ/wsbwk4H/596lXucVBO7lcQoEh8=
 github.com/curioswitch/go-docs-handler/plugins/proto v0.1.5/go.mod h1:Cka/I8hexDKVFwu/T01m44w5TPrCDu/ip1bTkOFEJmk=
-github.com/curioswitch/go-usegcp v0.0.0-20240524082550-9d642ba35329 h1:DSmpOnwOyXDen1IKB8v1MYjWRChyWrUtICfYT8acHxo=
-github.com/curioswitch/go-usegcp v0.0.0-20240524082550-9d642ba35329/go.mod h1:ro5m63BYc8wBClHIfJ5/fprG7Sx3Ie3mUtzi/9Z/beo=
+github.com/curioswitch/go-usegcp v0.0.0-20250604051341-ca63e0ecb9d7 h1:r4DAo5ywLSDvigpVkdzkqSgI/qBZxstcNK59eg+sXuY=
+github.com/curioswitch/go-usegcp v0.0.0-20250604051341-ca63e0ecb9d7/go.mod h1:o/Gke/1Qvfn18weqaewDEgUpsvwqCdmYIt6YhvrFZxc=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/envoyproxy/go-control-plane v0.13.4 h1:zEqyPVyku6IvWCFwux4x9RxkLOMUL+1vC9xUFv5l2/M=
