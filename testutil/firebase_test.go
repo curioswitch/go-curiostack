@@ -1,7 +1,6 @@
 package testutil
 
 import (
-	"context"
 	"os"
 	"testing"
 
@@ -37,9 +36,7 @@ func TestFirebaseIDToken(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			ctx := context.Background()
-
-			token, err := FirebaseIDToken(ctx, tc.userID, tc.tenantID, &conf.Google)
+			token, err := FirebaseIDToken(t.Context(), tc.userID, tc.tenantID, &conf.Google)
 			require.NoError(t, err)
 			require.NotEmpty(t, token)
 		})
