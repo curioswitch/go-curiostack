@@ -1,6 +1,7 @@
 package tasks
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/curioswitch/go-build"
@@ -14,7 +15,7 @@ func DefineAPI() {
 		Name:  "format-proto",
 		Usage: "Formats protobuf code.",
 		Action: func(a *goyek.A) {
-			cmd.Exec(a, "go tool buf format -w")
+			cmd.Exec(a, fmt.Sprintf("go run github.com/bufbuild/buf/cmd/buf@%s format -w", verBuf))
 		},
 	}))
 
@@ -22,12 +23,12 @@ func DefineAPI() {
 		Name:  "generate-proto",
 		Usage: "Generates protobuf code.",
 		Action: func(a *goyek.A) {
-			cmd.Exec(a, "go tool buf generate")
+			cmd.Exec(a, fmt.Sprintf("go run github.com/bufbuild/buf/cmd/buf@%s generate", verBuf))
 
 			if err := os.MkdirAll("pb", 0o755); err != nil { //nolint:gosec
 				a.Errorf("failed to create pb directory: %v", err)
 			}
-			cmd.Exec(a, "go tool buf build --as-file-descriptor-set -o ./descriptors/descriptorset.pb")
+			cmd.Exec(a, fmt.Sprintf("go run github.com/bufbuild/buf/cmd/buf@%s build --as-file-descriptor-set -o ./descriptors/descriptorset.pb", verBuf))
 		},
 	}))
 
@@ -35,7 +36,7 @@ func DefineAPI() {
 		Name:  "lint-proto",
 		Usage: "Lints protobuf code.",
 		Action: func(a *goyek.A) {
-			cmd.Exec(a, "go tool buf lint")
+			cmd.Exec(a, fmt.Sprintf("go run github.com/bufbuild/buf/cmd/buf@%s lint", verBuf))
 		},
 	}))
 }
