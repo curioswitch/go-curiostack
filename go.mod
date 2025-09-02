@@ -1,6 +1,6 @@
 module github.com/curioswitch/go-curiostack
 
-go 1.24.2
+go 1.24.5
 
 require (
 	connectrpc.com/connect v1.18.1
@@ -10,7 +10,7 @@ require (
 	github.com/curioswitch/go-build v0.4.0
 	github.com/curioswitch/go-docs-handler v0.1.5
 	github.com/curioswitch/go-docs-handler/plugins/proto v0.1.5
-	github.com/curioswitch/go-usegcp v0.0.0-20250604073322-8fa0305d8da6
+	github.com/curioswitch/go-usegcp v0.0.0-20250819041733-d03508a83964
 	github.com/go-chi/chi/v5 v5.2.3
 	github.com/go-viper/mapstructure/v2 v2.4.0
 	github.com/goyek/goyek/v2 v2.3.0
@@ -81,7 +81,7 @@ require (
 	github.com/spiffe/go-spiffe/v2 v2.5.0 // indirect
 	github.com/zeebo/errs v1.4.0 // indirect
 	go.opentelemetry.io/auto/sdk v1.1.0 // indirect
-	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.61.0 // indirect
+	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.62.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.38.0 // indirect
 	go.opentelemetry.io/otel/metric v1.38.0 // indirect
 	go.opentelemetry.io/proto/otlp v1.7.1 // indirect
