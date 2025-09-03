@@ -11,7 +11,7 @@ import (
 
 	"github.com/go-viper/mapstructure/v2"
 	"github.com/knadh/koanf/parsers/yaml"
-	"github.com/knadh/koanf/providers/env"
+	"github.com/knadh/koanf/providers/env/v2"
 	"github.com/knadh/koanf/providers/rawbytes"
 	"github.com/knadh/koanf/v2"
 )
@@ -128,8 +128,10 @@ func Load(conf CurioStack, confFiles fs.FS) error {
 		}
 	}
 
-	if err := k.Load(env.Provider("", ".", func(s string) string {
-		return strings.ReplaceAll(strings.ToLower(s), "_", ".")
+	if err := k.Load(env.Provider(".", env.Opt{
+		TransformFunc: func(k, v string) (string, any) {
+			return strings.ReplaceAll(strings.ToLower(k), "_", "."), v
+		},
 	}), nil); err != nil {
 		return fmt.Errorf("config: failed to load env: %w", err)
 	}
