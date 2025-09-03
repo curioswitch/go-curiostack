@@ -8,7 +8,7 @@
       "managerFilePatterns": ["/(^|/)buf.gen.yaml$/"],
       "datasourceTemplate": "go",
       "matchStrings": [
-        "# renovate: (?<depName>[^\\s]*)\\s+[^@]@(?<currentValue>[^\\s]*)"
+        "# renovate: (?<depName>[^\\s]*)\\s+[^@]+@(?<currentValue>[^\\s]*)"
       ]
     }
   ],
