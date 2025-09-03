@@ -5,7 +5,7 @@
   "customManagers": [
     {
       "customType": "regex",
-      "managerFilePatterns": ["/^buf.gen.yaml$/"],
+      "managerFilePatterns": ["/(^|/)buf.gen.yaml$/"],
       "datasourceTemplate": "go",
       "matchStrings": [
         "# renovate: (?<depName>[^\\s]*)\\s+[^@]@(?<currentValue>[^\\s]*)"
