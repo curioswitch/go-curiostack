@@ -13,7 +13,7 @@
     "editor.tabSize": 2,
     "eslint.workingDirectories": [{ "mode": "auto" }],
     "files.associations": {
-      "renovate.json": "jsonc"
+      "renovate*.json": "jsonc"
     },
     "go.lintFlags": ["--fix"],
     "go.lintTool": "golangci-lint",
