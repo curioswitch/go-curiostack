@@ -1,22 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["github>curioswitch/go-build:renovate"],
-  "rangeStrategy": "bump",
-  "customManagers": [
-    {
-      "customType": "regex",
-      "managerFilePatterns": ["/(^|/)buf.gen.yaml$/"],
-      "datasourceTemplate": "go",
-      "matchStrings": [
-        "# renovate: (?<depName>[^\\s]*)\\s+[^@]+@(?<currentValue>[^\\s]*)"
-      ]
-    }
-  ],
+  "extends": ["github>curioswitch/go-curiostack:renovate-export"],
   "packageRules": [
-    {
-      "matchCategories": ["js"],
-      "groupName": "Node dependencies"
-    },
     {
       // Maybe can enable someday if we can configure to update to n-1.
       // https://github.com/renovatebot/renovate/discussions/22214
