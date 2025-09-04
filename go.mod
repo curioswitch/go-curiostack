@@ -1,6 +1,6 @@
 module github.com/curioswitch/go-curiostack
 
-go 1.24.2
+go 1.24.0
 
 require (
 	connectrpc.com/connect v1.18.1
