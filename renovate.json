@@ -1,6 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["github>curioswitch/go-curiostack:renovate-export"],
+  "extends": ["github>curioswitch/go-build:renovate-export"],
   "packageRules": [
     {
       // Maybe can enable someday if we can configure to update to n-1.
