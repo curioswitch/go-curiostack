@@ -10,6 +10,7 @@ import (
 	"github.com/goyek/goyek/v2"
 	"github.com/goyek/x/cmd"
 
+	"github.com/curioswitch/go-build"
 	"github.com/curioswitch/go-curiostack/config"
 )
 
@@ -30,11 +31,14 @@ func DefineServer(opts ...ServerOption) {
 		log.Fatalf("failed to load config: %v", err)
 	}
 
+	runKo := "go run github.com/google/ko@" + verKo
+	build.RegisterCommandDownloads(runKo)
+
 	goyek.Define(goyek.Task{
 		Name:  "docker",
 		Usage: "Builds the server docker image to local.",
 		Action: func(a *goyek.A) {
-			cmd.Exec(a, koCmd(*dockerTags, *dockerLabels), cmd.Env("KO_DOCKER_REPO", "ko.local"))
+			cmd.Exec(a, koCmd(runKo, *dockerTags, *dockerLabels), cmd.Env("KO_DOCKER_REPO", "ko.local"))
 		},
 	})
 
@@ -42,7 +46,7 @@ func DefineServer(opts ...ServerOption) {
 		Name:  "push",
 		Usage: "Builds and pushes the server docker image.",
 		Action: func(a *goyek.A) {
-			cmd.Exec(a, koCmd(*dockerTags, *dockerLabels), cmd.Env("KO_DOCKER_REPO", fullDockerRepo(&conf)))
+			cmd.Exec(a, koCmd(runKo, *dockerTags, *dockerLabels), cmd.Env("KO_DOCKER_REPO", fullDockerRepo(&conf)))
 		},
 	})
 
@@ -128,10 +132,10 @@ func fullDockerRepo(conf *serverConfig) string {
 	return fmt.Sprintf("%s/%s", repoBase, svc)
 }
 
-func koCmd(dockerTags string, dockerLabels string) string {
+func koCmd(runKo string, dockerTags string, dockerLabels string) string {
 	labelsStr := ""
 	if dockerLabels != "" {
 		labelsStr = fmt.Sprintf("--image-label '%s'", dockerLabels)
 	}
-	return fmt.Sprintf("go run github.com/google/ko@%s build --bare --platform=linux/amd64,linux/arm64 --tags %s %s .", verKo, dockerTags, labelsStr)
+	return fmt.Sprintf("%s build --bare --platform=linux/amd64,linux/arm64 --tags %s %s .", runKo, dockerTags, labelsStr)
 }
