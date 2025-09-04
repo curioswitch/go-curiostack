@@ -11,11 +11,14 @@ import (
 
 // DefineAPI defines tasks such as protobuf generation for API projects.
 func DefineAPI() {
+	runBuf := "go run github.com/bufbuild/buf/cmd/buf@" + verBuf
+	build.RegisterCommandDownloads(runBuf + " -h")
+
 	build.RegisterLintTask(goyek.Define(goyek.Task{
 		Name:  "format-proto",
 		Usage: "Formats protobuf code.",
 		Action: func(a *goyek.A) {
-			cmd.Exec(a, fmt.Sprintf("go run github.com/bufbuild/buf/cmd/buf@%s format -w", verBuf))
+			cmd.Exec(a, runBuf+" format -w")
 		},
 	}))
 
@@ -28,7 +31,7 @@ func DefineAPI() {
 			if err := os.MkdirAll("pb", 0o755); err != nil { //nolint:gosec
 				a.Errorf("failed to create pb directory: %v", err)
 			}
-			cmd.Exec(a, fmt.Sprintf("go run github.com/bufbuild/buf/cmd/buf@%s build --as-file-descriptor-set -o ./descriptors/descriptorset.pb", verBuf))
+			cmd.Exec(a, runBuf+" build --as-file-descriptor-set -o ./descriptors/descriptorset.pb")
 		},
 	}))
 
@@ -36,7 +39,7 @@ func DefineAPI() {
 		Name:  "lint-proto",
 		Usage: "Lints protobuf code.",
 		Action: func(a *goyek.A) {
-			cmd.Exec(a, fmt.Sprintf("go run github.com/bufbuild/buf/cmd/buf@%s lint", verBuf))
+			cmd.Exec(a, runBuf+" lint")
 		},
 	}))
 }
