@@ -14,7 +14,7 @@ func DefineAPI() {
 	runBuf := "go run github.com/bufbuild/buf/cmd/buf@" + verBuf
 	build.RegisterCommandDownloads(runBuf + " -h")
 
-	build.RegisterLintTask(goyek.Define(goyek.Task{
+	build.RegisterFormatTask(goyek.Define(goyek.Task{
 		Name:  "format-proto",
 		Usage: "Formats protobuf code.",
 		Action: func(a *goyek.A) {
