@@ -10,7 +10,7 @@ require (
 	github.com/curioswitch/go-build v0.6.2
 	github.com/curioswitch/go-docs-handler v0.1.5
 	github.com/curioswitch/go-docs-handler/plugins/proto v0.1.5
-	github.com/curioswitch/go-usegcp v0.0.0-20251014013103-c519ce0105e4
+	github.com/curioswitch/go-usegcp v0.0.0-20251021035221-fc9dc60d218d
 	github.com/go-chi/chi/v5 v5.2.3
 	github.com/go-viper/mapstructure/v2 v2.4.0
 	github.com/goyek/goyek/v2 v2.3.0
@@ -31,7 +31,7 @@ require (
 	go.opentelemetry.io/otel/sdk/metric v1.38.0
 	go.opentelemetry.io/otel/trace v1.38.0
 	golang.org/x/net v0.46.0
-	google.golang.org/api v0.252.0
+	google.golang.org/api v0.253.0
 	google.golang.org/protobuf v1.36.10
 )
 
@@ -58,7 +58,7 @@ require (
 	github.com/envoyproxy/protoc-gen-validate v1.2.1 // indirect
 	github.com/fatih/color v1.18.0 // indirect
 	github.com/felixge/httpsnoop v1.0.4 // indirect
-	github.com/go-jose/go-jose/v4 v4.1.1 // indirect
+	github.com/go-jose/go-jose/v4 v4.1.2 // indirect
 	github.com/go-logr/logr v1.4.3 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/golang-jwt/jwt/v4 v4.5.2 // indirect
@@ -90,11 +90,11 @@ require (
 	golang.org/x/sync v0.17.0 // indirect
 	golang.org/x/sys v0.37.0 // indirect
 	golang.org/x/text v0.30.0 // indirect
-	golang.org/x/time v0.13.0 // indirect
+	golang.org/x/time v0.14.0 // indirect
 	google.golang.org/appengine/v2 v2.0.6 // indirect
 	google.golang.org/genproto v0.0.0-20250603155806-513f23925822 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20250825161204-c5933d9347a5 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20251002232023-7c0ddcbb5797 // indirect
-	google.golang.org/grpc v1.75.1 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20251014184007-4626949a642f // indirect
+	google.golang.org/grpc v1.76.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
