@@ -44,7 +44,7 @@ jobs:
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
-      - uses: curioswitch/go-build/.github/actions/setup-go@43d89fa5a241b51ac68f94cb38b12f7e92704b93 # v0.6.2
+      - uses: curioswitch/go-build/.github/actions/setup-go@f60fc8379d735d0415c0c56339d389f680760d96 # v0.6.3
 
       - name: run lints
         # We don't have OS-specific code so would be completely repetitive to run
@@ -69,7 +69,7 @@ jobs:
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
-      - uses: curioswitch/go-build/.github/actions/setup-go@43d89fa5a241b51ac68f94cb38b12f7e92704b93 # v0.6.2
+      - uses: curioswitch/go-build/.github/actions/setup-go@f60fc8379d735d0415c0c56339d389f680760d96 # v0.6.3
 
       - id: google-auth
         if: ${{ env.DOCKER_PUSH == 'yes' }}
@@ -86,7 +86,7 @@ jobs:
         run: gcloud auth configure-docker asia-northeast1-docker.pkg.dev
 
       - id: docker-meta
-        uses: docker/metadata-action@c1e51972afc2121e065aed6d45c65596fe445f3f # v5.8.0
+        uses: docker/metadata-action@318604b99e75e41977312d83839a89be02ca4893 # v5.9.0
         with:
           tags: |
             type=ref,event=branch
