@@ -13,7 +13,7 @@ require (
 	github.com/curioswitch/go-usegcp v0.0.0-20251112061520-c500c3a65003
 	github.com/go-chi/chi/v5 v5.2.3
 	github.com/go-viper/mapstructure/v2 v2.4.0
-	github.com/goyek/goyek/v2 v2.3.0
+	github.com/goyek/goyek/v3 v3.0.1
 	github.com/goyek/x v0.3.0
 	github.com/knadh/koanf/parsers/yaml v1.1.0
 	github.com/knadh/koanf/providers/env/v2 v2.0.0
