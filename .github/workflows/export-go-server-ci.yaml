@@ -44,7 +44,7 @@ jobs:
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
 
-      - uses: curioswitch/go-build/.github/actions/setup-go@fdcfe7aeece99aec19caad0b250b4f84022eec41 # v0.7.0
+      - uses: curioswitch/go-build/.github/actions/setup-go@8304121f488a5faa0b1ff094b6e2abc8da5b6c43 # v0.7.1
 
       - name: run lints
         # We don't have OS-specific code so would be completely repetitive to run
@@ -86,7 +86,7 @@ jobs:
         run: gcloud auth configure-docker asia-northeast1-docker.pkg.dev
 
       - id: docker-meta
-        uses: docker/metadata-action@318604b99e75e41977312d83839a89be02ca4893 # v5.9.0
+        uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051 # v5.10.0
         with:
           tags: |
             type=ref,event=branch
