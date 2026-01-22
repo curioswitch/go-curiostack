@@ -2,7 +2,7 @@ package tasks
 
 const (
 	// renovate: github.com/bufbuild/buf
-	verBuf = "v1.60.0"
+	verBuf = "v1.63.0"
 	// renovate: github.com/google/ko
-	verKo = "v0.18.0"
+	verKo = "v0.18.1"
 )
