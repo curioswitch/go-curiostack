@@ -151,7 +151,7 @@ func (b *Server) mountDefaultEndpoints() error {
 		}
 		if len(services) > 0 {
 			var docopts []docshandler.Option
-			var protodocopts []protodocs.Option
+			protodocopts := make([]protodocs.Option, 0, len(b.protoDocsRequests)+len(services)-1)
 
 			for _, r := range b.protoDocsRequests {
 				protodocopts = append(protodocopts, protodocs.WithExampleRequests(r.procedure, r.reqs[0], r.reqs[1:]...))

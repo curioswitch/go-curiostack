@@ -44,7 +44,7 @@ jobs:
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
-      - uses: curioswitch/go-build/.github/actions/setup-go@f60fc8379d735d0415c0c56339d389f680760d96 # v0.6.3
+      - uses: curioswitch/go-build/.github/actions/setup-go@fdcfe7aeece99aec19caad0b250b4f84022eec41 # v0.7.0
 
       - name: run lints
         # We don't have OS-specific code so would be completely repetitive to run
@@ -69,7 +69,7 @@ jobs:
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
-      - uses: curioswitch/go-build/.github/actions/setup-go@f60fc8379d735d0415c0c56339d389f680760d96 # v0.6.3
+      - uses: curioswitch/go-build/.github/actions/setup-go@fdcfe7aeece99aec19caad0b250b4f84022eec41 # v0.7.0
 
       - id: google-auth
         if: ${{ env.DOCKER_PUSH == 'yes' }}

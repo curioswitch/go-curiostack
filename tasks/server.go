@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 
 	"github.com/curioswitch/go-build"
-	"github.com/goyek/goyek/v2"
+	"github.com/goyek/goyek/v3"
 	"github.com/goyek/x/cmd"
 
 	"github.com/curioswitch/go-curiostack/config"
