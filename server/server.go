@@ -8,8 +8,6 @@ import (
 	"github.com/curioswitch/go-usegcp/middleware/requestlog"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
-	"golang.org/x/net/http2"
-	"golang.org/x/net/http2/h2c"
 
 	"github.com/curioswitch/go-curiostack/config"
 	"github.com/curioswitch/go-curiostack/otel"
@@ -31,9 +29,14 @@ func NewMux() *chi.Mux {
 
 // NewServer returns a new http.Server with standard settings to serve the given router.
 func NewServer(router http.Handler, conf *config.Common) *http.Server {
+	protocols := &http.Protocols{}
+	protocols.SetHTTP1(true)
+	protocols.SetUnencryptedHTTP2(true)
+
 	return &http.Server{
 		Addr:              conf.Server.Address,
-		Handler:           h2c.NewHandler(router, &http2.Server{}),
+		Handler:           router,
+		Protocols:         protocols,
 		ReadHeaderTimeout: 3 * time.Second,
 	}
 }
