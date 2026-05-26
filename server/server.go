@@ -17,7 +17,6 @@ import (
 func NewMux() *chi.Mux {
 	r := chi.NewRouter()
 
-	r.Use(middleware.RealIP)
 	r.Use(middleware.Recoverer)
 	r.Use(otel.HTTPMiddleware())
 	r.Use(middleware.Maybe(requestlog.NewMiddleware(), func(r *http.Request) bool {
