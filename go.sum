@@ -52,8 +52,8 @@ github.com/curioswitch/go-docs-handler v0.1.5 h1:MIdGAlcpiQLi1grnPwc/CVBuSOu374b
 github.com/curioswitch/go-docs-handler v0.1.5/go.mod h1:gSxE5Z46knEcLh6EtrwlmsApqcAp2bQUJl3csQiePWI=
 github.com/curioswitch/go-docs-handler/plugins/proto v0.1.5 h1:OjIICuxWhb+3+0GJ/wsbwk4H/596lXucVBO7lcQoEh8=
 github.com/curioswitch/go-docs-handler/plugins/proto v0.1.5/go.mod h1:Cka/I8hexDKVFwu/T01m44w5TPrCDu/ip1bTkOFEJmk=
-github.com/curioswitch/go-usegcp v0.0.0-20260622054425-0f2186873521 h1:zWQZYOj9CZi2dj+Xcah8yizH5ATXPPL2eET+S7Grr5Y=
-github.com/curioswitch/go-usegcp v0.0.0-20260622054425-0f2186873521/go.mod h1:FZp36hCy2lBh5C6TtYr1l6tffwWRrESOFifG7PR5028=
+github.com/curioswitch/go-usegcp v0.0.0-20260623043935-ddcf46567ce0 h1:6a7AlX3/dAb03Jn5Aho7miwZUqqgiD1247pIhqt6Ex0=
+github.com/curioswitch/go-usegcp v0.0.0-20260623043935-ddcf46567ce0/go.mod h1:FZp36hCy2lBh5C6TtYr1l6tffwWRrESOFifG7PR5028=
 github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc h1:U9qPSI2PIWSS1VwoXQT9A3Wy9MM3WgvqSxFWenqJduM=
 github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/envoyproxy/go-control-plane v0.14.0 h1:hbG2kr4RuFj222B6+7T83thSPqLjwBIfQawTkC++2HA=
@@ -217,8 +217,8 @@ golang.org/x/xerrors v0.0.0-20190717185122-a985d3407aa7/go.mod h1:I/5z698sn9Ka8T
 golang.org/x/xerrors v0.0.0-20191204190536-9bdfabe68543/go.mod h1:I/5z698sn9Ka8TeJc9MKroUUfqBBauWjQqLJ2OPfmY0=
 gonum.org/v1/gonum v0.17.0 h1:VbpOemQlsSMrYmn7T2OUvQ4dqxQXU+ouZFQsZOx50z4=
 gonum.org/v1/gonum v0.17.0/go.mod h1:El3tOrEuMpv2UdMrbNlKEh9vd86bmQ6vqIcDwxEOc1E=
-google.golang.org/api v0.285.0 h1:B7eHHoKGAX/LrPkQvhQqnGwjgWxofbdGwCTQvpm8FkM=
-google.golang.org/api v0.285.0/go.mod h1:NlOlUIr8MPoIhT9Bb/oUnRuHbJOLwxb6JSYJM8Yz+jQ=
+google.golang.org/api v0.286.0 h1:TdTXMvzYKnWV1/lPbCdbXRqBrkDqjPto22H2xeZZ8LI=
+google.golang.org/api v0.286.0/go.mod h1:NlOlUIr8MPoIhT9Bb/oUnRuHbJOLwxb6JSYJM8Yz+jQ=
 google.golang.org/appengine/v2 v2.0.6 h1:LvPZLGuchSBslPBp+LAhihBeGSiRh1myRoYK4NtuBIw=
 google.golang.org/appengine/v2 v2.0.6/go.mod h1:WoEXGoXNfa0mLvaH5sV3ZSGXwVmy8yf7Z1JKf3J3wLI=
 google.golang.org/genproto v0.0.0-20260511170946-3700d4141b60 h1:rhBdfmsOlOZIvz3Y5/BdUzPg2CkO8L7QQPKj96B8554=
