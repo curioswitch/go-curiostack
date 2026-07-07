@@ -1,6 +1,7 @@
 # CurioStack
 
-Very full stack to help satisfy curiosity. The successor to https://github.com/curioswitch/curiostack, in Go.
+Very full stack to help satisfy curiosity. The successor to <https://github.com/curioswitch/curiostack>,
+in Go.
 
 A full example using the stack can be found in [tasuke](https://github.com/curioswitch/tasuke/tree/main/frontend/server).
 
@@ -11,13 +12,13 @@ A full example using the stack can be found in [tasuke](https://github.com/curio
 CurioStack defines build tasks intended to be used with [go-build](https://github.com/curioswitch/go-build),
 specific to server development.
 
-- Docker image build and push via [ko](https://ko.build)
-- Protobuf linting / generation via [buf](https://buf.build)
+*   Docker image build and push via [ko](https://ko.build)
+*   Protobuf linting / generation via [buf](https://buf.build)
 
 ### Server framework
 
-A lightweight [server framework](./server) intends to handle boiler plate common to all production-grade servers,
-such as setting up observability and providing debug experiences for API development.
+A lightweight [server framework](./server) intends to handle boiler plate common to all production-grade
+servers, such as setting up observability and providing debug experiences for API development.
 
 CurioStack uses [connect](https://connectrpc.com) for exposing API services from proto files. This example
 sets up an RPC endpoint with Firebase authentication middleware, with support wired into the docs handler
