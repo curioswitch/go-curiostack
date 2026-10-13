@@ -51,7 +51,6 @@ func ConnectInterceptor() connect.Interceptor {
 	i, err := otelconnect.NewInterceptor(
 		otelconnect.WithMeterProvider(meterProvider),
 		otelconnect.WithTracerProvider(tracerProvider),
-		otelconnect.WithoutServerPeerAttributes(),
 		otelconnect.WithTrustRemote(),
 	)
 	if err != nil {
