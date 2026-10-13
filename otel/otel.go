@@ -8,7 +8,6 @@ import (
 	"os"
 	"sync"
 
-	gcppropagator "github.com/GoogleCloudPlatform/opentelemetry-operations-go/propagator"
 	"go.opentelemetry.io/contrib/detectors/gcp"
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 	"go.opentelemetry.io/otel"
@@ -52,7 +51,6 @@ func doInitialize() {
 
 	otel.SetTextMapPropagator(
 		propagation.NewCompositeTextMapPropagator(
-			gcppropagator.CloudTraceOneWayPropagator{},
 			propagation.TraceContext{},
 			propagation.Baggage{},
 		))
