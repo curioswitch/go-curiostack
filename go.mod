@@ -7,7 +7,7 @@ require (
 	connectrpc.com/otelconnect v0.12.0
 	firebase.google.com/go/v4 v4.22.0
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/propagator v0.62.0
-	github.com/curioswitch/go-build v0.9.0
+	github.com/curioswitch/go-build v0.10.0
 	github.com/curioswitch/go-docs-handler v0.1.5
 	github.com/curioswitch/go-docs-handler/plugins/proto v0.1.5
 	github.com/curioswitch/go-usegcp v0.0.0-20260929060807-df34bf363f35
@@ -44,7 +44,7 @@ require (
 	cloud.google.com/go/iam v1.12.0 // indirect
 	cloud.google.com/go/longrunning v1.2.0 // indirect
 	cloud.google.com/go/monitoring v1.30.0 // indirect
-	cloud.google.com/go/storage v1.62.1 // indirect
+	cloud.google.com/go/storage v1.62.3 // indirect
 	connectrpc.com/connect/v2 v2.0.0 // indirect
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/metric v0.56.0 // indirect
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/internal/resourcemapping v0.56.0 // indirect
