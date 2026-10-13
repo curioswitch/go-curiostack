@@ -22,6 +22,15 @@
     {
       "matchCategories": ["js"],
       "groupName": "Node dependencies"
+    },
+    {
+      "matchCategories": ["python"],
+      "groupName": "Python dependencies"
+    },
+    {
+      "matchCategories": ["rust"],
+      "groupName": "Rust dependencies",
+      "rangeStrategy": "bump"
     }
   ]
 }
