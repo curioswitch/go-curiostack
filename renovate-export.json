@@ -2,6 +2,9 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["github>curioswitch/go-build:renovate"],
   "rangeStrategy": "bump",
+  "lockFileMaintenance": {
+    "enabled": true
+  },
   "customManagers": [
     {
       "customType": "regex",
