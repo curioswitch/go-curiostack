@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strings"
 
-	"connectrpc.com/connect"
+	"connectrpc.com/connect/v2"
 	"connectrpc.com/otelconnect"
 	"github.com/go-chi/chi/v5"
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
@@ -45,10 +45,10 @@ func HTTPMiddleware() func(http.Handler) http.Handler {
 	}
 }
 
-// ConnectInterceptor returns a connect.Interceptor configured with
+// ConnectServerInterceptor returns a connect.ServerInterceptor configured with
 // tracing and metrics.
-func ConnectInterceptor() connect.Interceptor {
-	i, err := otelconnect.NewInterceptor(
+func ConnectServerInterceptor() connect.ServerInterceptor {
+	i, err := otelconnect.NewServerInterceptor(
 		otelconnect.WithMeterProvider(meterProvider),
 		otelconnect.WithTracerProvider(tracerProvider),
 		otelconnect.WithTrustRemote(),
