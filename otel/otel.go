@@ -8,7 +8,6 @@ import (
 	"os"
 	"sync"
 
-	"github.com/curioswitch/go-curiostack/config"
 	"go.opentelemetry.io/contrib/detectors/gcp"
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 	"go.opentelemetry.io/otel"
@@ -23,6 +22,8 @@ import (
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
+
+	"github.com/curioswitch/go-curiostack/config"
 )
 
 var (

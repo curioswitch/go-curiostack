@@ -99,12 +99,12 @@ func (s *Server) AddSampleRequests[Req proto.Message](procedure string, reqs ...
 		panic("procedure must be a constant from connect generated code, such as curioapi.CurioServiceMethodProcedure")
 	}
 
-	var reqProtos []proto.Message
-	for _, r := range reqs {
+	reqProtos := make([]proto.Message, len(reqs))
+	for i, r := range reqs {
 		if !checkMatchesType(r, method.Input()) {
 			panic("request type must match the input type of the procedure in the proto")
 		}
-		reqProtos = append(reqProtos, r)
+		reqProtos[i] = r
 	}
 
 	s.protoDocsRequests = append(s.protoDocsRequests, protoDocsRequests{
@@ -167,7 +167,7 @@ func (s *Server) Start(ctx context.Context) error {
 //
 // An exit code is returned, so the general pattern for this function will
 // be to call [os.Exit] with the result of this function.
-func Main[T config.CurioStack](conf T, confFiles fs.FS, run func(ctx context.Context, conf T, b *Server) error) int {
+func Main[T config.CurioStack](conf T, confFiles fs.FS, run func(ctx context.Context, conf T, s *Server) error) int {
 	ctx := context.Background()
 
 	otel.Initialize(conf) // initialize as early as possible to instrument globals
@@ -179,18 +179,18 @@ func Main[T config.CurioStack](conf T, confFiles fs.FS, run func(ctx context.Con
 
 	logging.Initialize(&conf.GetCommon().Logging)
 
-	b := &Server{
+	s := &Server{
 		mux: NewMux(),
 
 		conf: conf.GetCommon(),
 	}
 
-	if err := run(ctx, conf, b); err != nil {
+	if err := run(ctx, conf, s); err != nil {
 		slog.Error(fmt.Sprintf("Failed to configure server: %v", err))
 		return 1
 	}
 
-	if !b.startCalled {
+	if !s.startCalled {
 		slog.Error("Start was not called on server.Builder, it must be called in your run callback to start the server.")
 		return 1
 	}
@@ -198,11 +198,11 @@ func Main[T config.CurioStack](conf T, confFiles fs.FS, run func(ctx context.Con
 	return 0
 }
 
-func (b *Server) mountDefaultEndpoints() error {
+func (s *Server) mountDefaultEndpoints() error {
 	docsDefined := false
 	healthDefined := false
 	// Define /internal/health if not already defined.
-	_ = chi.Walk(b.mux, func(_, route string, _ http.Handler, _ ...func(http.Handler) http.Handler) error {
+	_ = chi.Walk(s.mux, func(_, route string, _ http.Handler, _ ...func(http.Handler) http.Handler) error {
 		switch route {
 		case "/internal/docs/*":
 			docsDefined = true
@@ -214,7 +214,7 @@ func (b *Server) mountDefaultEndpoints() error {
 
 	if !docsDefined {
 		var services []string
-		for _, r := range b.protoDocsRequests {
+		for _, r := range s.protoDocsRequests {
 			svc, _, _ := strings.Cut(r.procedure[1:], "/")
 			if !slices.Contains(services, svc) {
 				services = append(services, svc)
@@ -222,9 +222,9 @@ func (b *Server) mountDefaultEndpoints() error {
 		}
 		if len(services) > 0 {
 			var docopts []docshandler.Option
-			protodocopts := make([]protodocs.Option, 0, len(b.protoDocsRequests)+len(services)-1)
+			protodocopts := make([]protodocs.Option, 0, len(s.protoDocsRequests)+len(services)-1)
 
-			for _, r := range b.protoDocsRequests {
+			for _, r := range s.protoDocsRequests {
 				protodocopts = append(protodocopts, protodocs.WithExampleRequests(r.procedure, r.reqs[0], r.reqs[1:]...))
 			}
 
@@ -232,8 +232,8 @@ func (b *Server) mountDefaultEndpoints() error {
 				protodocopts = append(protodocopts, protodocs.WithAdditionalService(svc))
 			}
 
-			if b.docsFirebaseDomain != "" {
-				script := docsFirebaseAuthScript(b.docsFirebaseDomain)
+			if s.docsFirebaseDomain != "" {
+				script := docsFirebaseAuthScript(s.docsFirebaseDomain)
 				docopts = append(docopts, docshandler.WithInjectedScriptSupplier(func() string {
 					return script
 				}))
@@ -243,12 +243,12 @@ func (b *Server) mountDefaultEndpoints() error {
 			if err != nil {
 				return fmt.Errorf("server: create docs handler: %w", err)
 			}
-			b.mux.Handle("/internal/docs/*", http.StripPrefix("/internal/docs", docs))
+			s.mux.Handle("/internal/docs/*", http.StripPrefix("/internal/docs", docs))
 		}
 	}
 
 	if !healthDefined {
-		b.mux.Get("/internal/health", func(w http.ResponseWriter, _ *http.Request) {
+		s.mux.Get("/internal/health", func(w http.ResponseWriter, _ *http.Request) {
 			w.WriteHeader(http.StatusOK)
 		})
 	}
