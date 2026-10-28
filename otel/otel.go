@@ -11,6 +11,7 @@ import (
 	"go.opentelemetry.io/contrib/detectors/gcp"
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetrichttp"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp"
 	"go.opentelemetry.io/otel/exporters/stdout/stdoutmetric"
@@ -19,6 +20,10 @@ import (
 	sdkmetric "go.opentelemetry.io/otel/sdk/metric"
 	"go.opentelemetry.io/otel/sdk/resource"
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
+	"golang.org/x/oauth2"
+	"golang.org/x/oauth2/google"
+
+	"github.com/curioswitch/go-curiostack/config"
 )
 
 var (
@@ -28,25 +33,23 @@ var (
 	initOnce sync.Once
 )
 
-func init() {
-	Initialize()
-}
-
 // Initialize initializes the OpenTelemetry SDK with the default configuration
 // and instruments globals where applicable.
-func Initialize() {
-	initOnce.Do(doInitialize)
+func Initialize(conf config.CurioStack) {
+	initOnce.Do(func() { doInitialize(conf) })
 }
 
-func doInitialize() {
+func doInitialize(conf config.CurioStack) {
 	ctx := context.Background()
+
+	projID := conf.GetCommon().Google.Project
 
 	// Avoid autoexport package because we prefer to default to none, which is not easy,
 	// and don't want multiple OTLP exporters included in the binary.
-	res := newResource(ctx)
-	meterProvider = newMeterProvider(ctx, res)
+	res := newResource(ctx, projID)
+	meterProvider = newMeterProvider(ctx, res, projID)
 	otel.SetMeterProvider(meterProvider)
-	tracerProvider = newTracerProvider(ctx, res)
+	tracerProvider = newTracerProvider(ctx, res, projID)
 	otel.SetTracerProvider(tracerProvider)
 
 	otel.SetTextMapPropagator(
@@ -58,7 +61,7 @@ func doInitialize() {
 	http.DefaultClient = &http.Client{Transport: otelhttp.NewTransport(http.DefaultTransport)}
 }
 
-func newResource(ctx context.Context) *resource.Resource {
+func newResource(ctx context.Context, projID string) *resource.Resource {
 	// Ignore resource creation errors, our logic is simple and any error is in
 	// a library out of our control. Even with errors there will generally be enough
 	// information in the resource.
@@ -70,13 +73,14 @@ func newResource(ctx context.Context) *resource.Resource {
 		resource.WithProcess(),
 		resource.WithOS(),
 		resource.WithFromEnv(),
+		resource.WithAttributes(attribute.String("gcp.project_id", projID)),
 	)
 
 	return res
 }
 
-func newTracerProvider(ctx context.Context, res *resource.Resource) *sdktrace.TracerProvider {
-	exporter, err := newSpanExporter(ctx)
+func newTracerProvider(ctx context.Context, res *resource.Resource, projID string) *sdktrace.TracerProvider {
+	exporter, err := newSpanExporter(ctx, projID)
 	if err != nil {
 		log.Fatalf("Failed to create span exporter: %v\n", err)
 	}
@@ -91,7 +95,7 @@ func newTracerProvider(ctx context.Context, res *resource.Resource) *sdktrace.Tr
 	return sdktrace.NewTracerProvider(opts...)
 }
 
-func newSpanExporter(ctx context.Context) (sdktrace.SpanExporter, error) {
+func newSpanExporter(ctx context.Context, projID string) (sdktrace.SpanExporter, error) {
 	switch os.Getenv("OTEL_TRACES_EXPORTER") {
 	case "console":
 		exp, err := stdouttrace.New()
@@ -100,7 +104,20 @@ func newSpanExporter(ctx context.Context) (sdktrace.SpanExporter, error) {
 		}
 		return exp, nil
 	case "otlp":
-		exp, err := otlptracehttp.New(ctx, otlptracehttp.WithInsecure())
+		var opts []otlptracehttp.Option
+		if os.Getenv("OTEL_EXPORTER_OTLP_ENDPOINT") == "https://telemetry.googleapis.com" {
+			creds, err := google.FindDefaultCredentials(ctx)
+			if err == nil {
+				opts = append(opts,
+					otlptracehttp.WithHTTPClient(oauth2.NewClient(ctx, creds.TokenSource)),
+					otlptracehttp.WithHeaders(map[string]string{
+						"x-goog-user-project": projID,
+					}))
+			}
+		} else {
+			opts = append(opts, otlptracehttp.WithInsecure())
+		}
+		exp, err := otlptracehttp.New(ctx, opts...)
 		if err != nil {
 			return nil, fmt.Errorf("otel: creating otlp span exporter: %w", err)
 		}
@@ -112,8 +129,8 @@ func newSpanExporter(ctx context.Context) (sdktrace.SpanExporter, error) {
 	}
 }
 
-func newMeterProvider(ctx context.Context, res *resource.Resource) *sdkmetric.MeterProvider {
-	exporter, err := newMetricExporter(ctx)
+func newMeterProvider(ctx context.Context, res *resource.Resource, projID string) *sdkmetric.MeterProvider {
+	exporter, err := newMetricExporter(ctx, projID)
 	if err != nil {
 		log.Fatalf("Failed to create metric exporter: %v\n", err)
 	}
@@ -128,7 +145,7 @@ func newMeterProvider(ctx context.Context, res *resource.Resource) *sdkmetric.Me
 	return sdkmetric.NewMeterProvider(opts...)
 }
 
-func newMetricExporter(ctx context.Context) (sdkmetric.Exporter, error) {
+func newMetricExporter(ctx context.Context, projID string) (sdkmetric.Exporter, error) {
 	switch os.Getenv("OTEL_METRICS_EXPORTER") {
 	case "console":
 		exp, err := stdoutmetric.New()
@@ -137,7 +154,20 @@ func newMetricExporter(ctx context.Context) (sdkmetric.Exporter, error) {
 		}
 		return exp, nil
 	case "otlp":
-		exp, err := otlpmetrichttp.New(ctx, otlpmetrichttp.WithInsecure())
+		var opts []otlpmetrichttp.Option
+		if os.Getenv("OTEL_EXPORTER_OTLP_ENDPOINT") == "https://telemetry.googleapis.com" {
+			creds, err := google.FindDefaultCredentials(ctx)
+			if err == nil {
+				opts = append(opts,
+					otlpmetrichttp.WithHTTPClient(oauth2.NewClient(ctx, creds.TokenSource)),
+					otlpmetrichttp.WithHeaders(map[string]string{
+						"x-goog-user-project": projID,
+					}))
+			}
+		} else {
+			opts = append(opts, otlpmetrichttp.WithInsecure())
+		}
+		exp, err := otlpmetrichttp.New(ctx, opts...)
 		if err != nil {
 			return nil, fmt.Errorf("otel: creating otlp metric exporter: %w", err)
 		}
