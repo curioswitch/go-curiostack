@@ -9,7 +9,7 @@ require (
 	github.com/curioswitch/go-build v0.10.0
 	github.com/curioswitch/go-docs-handler v0.1.5
 	github.com/curioswitch/go-docs-handler/plugins/proto v0.1.5
-	github.com/curioswitch/go-usegcp v0.0.0-20261113111411-3765d531a155
+	github.com/curioswitch/go-usegcp v0.0.0-20261117023829-a18247e7ea09
 	github.com/go-chi/chi/v5 v5.5.0
 	github.com/go-viper/mapstructure/v2 v2.5.0
 	github.com/goyek/goyek/v3 v3.0.1
@@ -30,7 +30,7 @@ require (
 	go.opentelemetry.io/otel/sdk/metric v1.47.0
 	go.opentelemetry.io/otel/trace v1.47.0
 	golang.org/x/oauth2 v0.38.0
-	google.golang.org/api v0.315.0
+	google.golang.org/api v0.316.0
 	google.golang.org/protobuf v1.36.12
 )
 
